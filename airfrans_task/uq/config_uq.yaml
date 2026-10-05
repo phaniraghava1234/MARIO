@@ -1,0 +1,48 @@
+# config_uq.yaml — MC dropout flow model training
+# Run from airfrans_task/uq. Override paths on the CLI, e.g.:
+#   python train_uq.py \
+#     dataset.root_path=C:/Users/phani/OneDrive/Aerodynamic-_Prediction_with_GNN/data/Dataset \
+#     dataset.train_latents_path=<absolute path> \
+#     dataset.test_latents_path=<absolute path> \
+#     optim.epochs=2 optim.num_points=1000        # smoke run
+
+saved_model_path:
+restart_training: False
+
+dataset:
+  root_path: ???
+  task: scarce
+  train_latents_path: ???
+  test_latents_path: ???
+
+optim:
+  batch_size: 4
+  batch_size_val:
+  lr_inr: 1e-3
+  epochs: 1000
+  num_points: 16000
+  val_split_size: 40
+  val_split_seed: 0
+  checkpoint_every_n_epochs: 50
+
+inr:
+  latent_dim: 10        # 8 geom latent + 2 inlet velocity
+  in_dim: 6             # [x, y, sdf, nx, ny, bl_mask]
+  out_dim: 4            # [u, v, p, nu_t]
+  out_scalar_dim: 0
+  depth: 6
+  hidden_dim: 256
+  hypernet_depth: 4
+  include_input: True
+  scale: [0.5, 1]
+  num_frequencies: 64
+  dropout_hnn: 0.1
+  dropout_trunk: 0.1
+
+wandb:
+  project: airfrans_uq
+  mode: offline
+
+hydra:
+  job:
+    chdir: false
